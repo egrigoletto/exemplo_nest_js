@@ -1,4 +1,5 @@
 import { Controller, Get, Render } from '@nestjs/common';
+import { LocationService } from './location.service';
 
 interface ILocationListDto {
   locations: string [];
@@ -6,15 +7,12 @@ interface ILocationListDto {
 
 @Controller()
 export class LocationController {
+  constructor(private readonly loacationService: LocationService) {}
+
   @Get()
   @Render('list.hbs')
   listLocations(): ILocationListDto {
-    return {
-      locations: [
-        'location 1',
-        'location 2',
-        'location 3'
-      ]
-    };
+    const locations = this.loacationService.list();
+    return { locations };
   }
 }

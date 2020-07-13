@@ -1,4 +1,9 @@
 import addJestHbsExtension from 'jest-hbs-extension';
-import { join } from 'path';
+import { ConfigService } from '../src/config/config.service';
 
-addJestHbsExtension(join(__dirname, '..', 'views'));
+
+const config = new ConfigService();
+  // pega a config  lá do arquivo defualt.ts na pasta config do app
+  const viewsPath = config.get<string>('templates.path');
+
+addJestHbsExtension(viewsPath);

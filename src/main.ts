@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
+import { ConfigService } from '../src/config/config.service';
 
 
 
@@ -11,8 +11,13 @@ async function bootstrap() {
   );
   //configura uma view engine como no express
   app.setViewEngine('hbs');
-  app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  // injeta a configuração
+  const config = app.get(ConfigService);
+  // pega a config  lá do arquivo defualt.ts na pasta config do app
+  const viewsDirectory = config.get<string>('templates.path');
+  const publicDirectory = config.get<string>('public.path');
+  app.setBaseViewsDir(viewsDirectory);
+  app.useStaticAssets(publicDirectory);
   await app.listen(3000);
 }
 bootstrap();
